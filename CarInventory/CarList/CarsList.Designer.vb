@@ -151,9 +151,11 @@ Partial Class frmCarInventory
         Me.lvwCars.FullRowSelect = True
         Me.lvwCars.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable
         Me.lvwCars.Location = New System.Drawing.Point(2, 147)
+        Me.lvwCars.MaximumSize = New System.Drawing.Size(378, 246)
+        Me.lvwCars.MinimumSize = New System.Drawing.Size(378, 246)
         Me.lvwCars.MultiSelect = False
         Me.lvwCars.Name = "lvwCars"
-        Me.lvwCars.Size = New System.Drawing.Size(368, 246)
+        Me.lvwCars.Size = New System.Drawing.Size(378, 246)
         Me.lvwCars.TabIndex = 9
         Me.CarToolTip.SetToolTip(Me.lvwCars, "Select a car to modify.")
         Me.lvwCars.UseCompatibleStateImageBehavior = False
@@ -186,9 +188,11 @@ Partial Class frmCarInventory
         'lbResult
         '
         Me.lbResult.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.lbResult.Location = New System.Drawing.Point(2, 333)
+        Me.lbResult.Location = New System.Drawing.Point(2, 353)
+        Me.lbResult.MaximumSize = New System.Drawing.Size(378, 81)
+        Me.lbResult.MinimumSize = New System.Drawing.Size(378, 81)
         Me.lbResult.Name = "lbResult"
-        Me.lbResult.Size = New System.Drawing.Size(368, 81)
+        Me.lbResult.Size = New System.Drawing.Size(378, 81)
         Me.lbResult.TabIndex = 10
         Me.CarToolTip.SetToolTip(Me.lbResult, "Success or Error message will appear here.")
         '
@@ -234,7 +238,9 @@ Partial Class frmCarInventory
         Me.Controls.Add(Me.btnReset)
         Me.Controls.Add(Me.btnEnter)
         Me.MaximizeBox = False
+        Me.MaximumSize = New System.Drawing.Size(398, 523)
         Me.MinimizeBox = False
+        Me.MinimumSize = New System.Drawing.Size(398, 523)
         Me.Name = "frmCarInventory"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Cars  List"

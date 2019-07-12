@@ -37,7 +37,7 @@ Public Class frmCarInventory
             editMode = True
 
             ' 
-            lbResult.Text = "It worked!"
+
 
             ' if the current car identification number has a no value
             ' then this is not an existing item from the listview
@@ -67,7 +67,7 @@ Public Class frmCarInventory
                 car.Make = cmbMake.Text
                 car.Model = txtModel.Text
                 car.Year = CInt(cmbYear.Text.ToString)
-                car.Price = CDbl(txtPrice.Text.ToString)
+                car.Price = CDbl(txtPrice.Text.ToString.Trim)
                 car.isNew = chkNew.Checked
             End If
 
@@ -90,9 +90,9 @@ Public Class frmCarInventory
                 carItem.SubItems.Add(car.IdentificationNumber.ToString())
                 carItem.SubItems.Add(car.Make)
                 carItem.SubItems.Add(car.Model)
-                carItem.SubItems.Add(car.Year.ToString)
-                carItem.SubItems.Add(car.Price.ToString)
 
+                carItem.SubItems.Add(FormatCurrency(car.Price.ToString))
+                carItem.SubItems.Add(car.Year.ToString)
                 ' add the new instantiated and populated ListViewItem
                 ' to the listview control
                 lvwCars.Items.Add(carItem)
@@ -102,7 +102,7 @@ Public Class frmCarInventory
 
             ' clear the controls
             Reset()
-
+            lbResult.Text = "It worked!"
             ' set the edit flag to false
             editMode = False
 
@@ -120,6 +120,8 @@ Public Class frmCarInventory
         txtPrice.Text = String.Empty
         chkNew.Checked = False
         cmbMake.SelectedIndex = -1
+        cmbYear.SelectedIndex = -1
+
         lbResult.Text = String.Empty
 
         currentCarIdentificationNumber = String.Empty
@@ -169,11 +171,12 @@ Public Class frmCarInventory
         ' check if the first name has been entered
         If txtPrice.Text.Trim.Length = 0 Then
             outputMessage += "Please enter the car's price" & vbCrLf
-         returnValue = False
+            returnValue = False
         Else
+
             If Not IsNumeric(txtPrice.Text.Trim) Then
                 outputMessage += "Please enter the car's price as number greater than zero." & vbCrLf
-             returnValue = False
+                returnValue = False
             Else
                 If Not (CDbl(txtPrice.Text.Trim) > 0) Then
                     ' If not set the error message
@@ -270,12 +273,10 @@ Public Class frmCarInventory
         cmbYear.Text = car.Year.ToString                  ' get the year and set the combo box
         chkNew.Checked = car.isNew ' get the new status and set the combo box
 
-        lbResult.Text = car.GetSalutation()
+        lbResult.Text = car.GetCarData()
 
 
     End Sub
-
-
 
 
 End Class
