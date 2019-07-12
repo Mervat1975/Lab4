@@ -26,87 +26,90 @@ Public Class frmCarInventory
     ''' <param name="sender">Object</param>
     ''' <param name="e">EventArgs</param>
     Private Sub btnEnter_Click(sender As Object, e As EventArgs) Handles btnEnter.Click
+        Try
+            Dim car As Car            ' declare a Car object
+            Dim carItem As ListViewItem    ' declare a ListViewItem class
 
-        Dim car As Car            ' declare a Car object
-        Dim carItem As ListViewItem    ' declare a ListViewItem class
+            ' validate the data in the form
+            If IsValidInput() = True Then
 
-        ' validate the data in the form
-        If IsValidInput() = True Then
+                ' set the edit flag to true
+                editMode = True
 
-            ' set the edit flag to true
-            editMode = True
-
-            ' 
+                ' 
 
 
-            ' if the current car identification number has a no value
-            ' then this is not an existing item from the listview
-            If currentCarIdentificationNumber.Trim.Length = 0 Then
+                ' if the current car identification number has a no value
+                ' then this is not an existing item from the listview
+                If currentCarIdentificationNumber.Trim.Length = 0 Then
 
-                ' create a new car object using the parameterized constructor
-                car = New Car(cmbMake.Text, txtModel.Text, CInt(cmbYear.Text), CDbl(txtPrice.Text), chkNew.Checked)
+                    ' create a new car object using the parameterized constructor
+                    car = New Car(cmbMake.Text, txtModel.Text, CInt(cmbYear.Text), CDbl(txtPrice.Text), chkNew.Checked)
 
-                ' add the car to the carList collection
-                ' using the identoification number as the key
-                ' which will make the car object easier to
-                ' find in the carList collection later
-                carList.Add(car.IdentificationNumber.ToString(), car)
+                    ' add the car to the carList collection
+                    ' using the identoification number as the key
+                    ' which will make the car object easier to
+                    ' find in the carList collection later
+                    carList.Add(car.IdentificationNumber.ToString(), car)
 
-            Else
-                ' if the current car identification number has a value
-                ' then the user has selected something from the list view
-                ' so the data in the car object in the carList collection
-                ' must be updated
+                Else
+                    ' if the current car identification number has a value
+                    ' then the user has selected something from the list view
+                    ' so the data in the car object in the carList collection
+                    ' must be updated
 
-                ' so get the car from the custmers collection
-                ' using the selected key
-                car = CType(carList.Item(currentCarIdentificationNumber), Car)
+                    ' so get the car from the custmers collection
+                    ' using the selected key
+                    car = CType(carList.Item(currentCarIdentificationNumber), Car)
 
-                ' update the data in the specific object
-                ' from the controls
-                car.Make = cmbMake.Text
-                car.Model = txtModel.Text
-                car.Year = CInt(cmbYear.Text.ToString)
-                car.Price = CDbl(txtPrice.Text.ToString.Trim)
-                car.isNew = chkNew.Checked
+                    ' update the data in the specific object
+                    ' from the controls
+                    car.Make = cmbMake.Text
+                    car.Model = txtModel.Text
+                    car.Year = CInt(cmbYear.Text.ToString)
+                    car.Price = CDbl(txtPrice.Text.ToString.Trim)
+                    car.isNew = chkNew.Checked
+                End If
+
+                ' clear the items from the listview control
+                lvwcars.Items.Clear()
+
+                ' loop through the carList collection
+                ' and populate the list view
+                For Each carEntry As DictionaryEntry In carList
+
+                    ' instantiate a new ListViewItem
+                    carItem = New ListViewItem()
+
+                    ' get the car from the list
+                    car = CType(carEntry.Value, Car)
+
+                    ' assign the values to the ckecked control
+                    ' and the subitems
+                    carItem.Checked = car.isNew
+                    carItem.SubItems.Add(car.IdentificationNumber.ToString())
+                    carItem.SubItems.Add(car.Make)
+                    carItem.SubItems.Add(car.Model)
+
+                    carItem.SubItems.Add(FormatCurrency(car.Price.ToString))
+                    carItem.SubItems.Add(car.Year.ToString)
+                    ' add the new instantiated and populated ListViewItem
+                    ' to the listview control
+                    lvwCars.Items.Add(carItem)
+
+                Next carEntry
+
+
+                ' clear the controls
+                Reset()
+                lbResult.Text = "It worked!"
+                ' set the edit flag to false
+                editMode = False
+
             End If
-
-            ' clear the items from the listview control
-            lvwcars.Items.Clear()
-
-            ' loop through the carList collection
-            ' and populate the list view
-            For Each carEntry As DictionaryEntry In carList
-
-                ' instantiate a new ListViewItem
-                carItem = New ListViewItem()
-
-                ' get the car from the list
-                car = CType(carEntry.Value, Car)
-
-                ' assign the values to the ckecked control
-                ' and the subitems
-                carItem.Checked = car.isNew
-                carItem.SubItems.Add(car.IdentificationNumber.ToString())
-                carItem.SubItems.Add(car.Make)
-                carItem.SubItems.Add(car.Model)
-
-                carItem.SubItems.Add(FormatCurrency(car.Price.ToString))
-                carItem.SubItems.Add(car.Year.ToString)
-                ' add the new instantiated and populated ListViewItem
-                ' to the listview control
-                lvwCars.Items.Add(carItem)
-
-            Next carEntry
-
-
-            ' clear the controls
-            Reset()
-            lbResult.Text = "It worked!"
-            ' set the edit flag to false
-            editMode = False
-
-        End If
+        Catch
+            lbResult.Text = "Unexpected Error happend!!"
+        End Try
 
     End Sub
 
@@ -255,29 +258,35 @@ Public Class frmCarInventory
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub lvwcars_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lvwcars.SelectedIndexChanged
+        Try
+            ' constant that represents the index of the subitem in the list that
+            ' holds the car identification number 
+            Const identificationSubItemIndex As Integer = 1
 
-        ' constant that represents the index of the subitem in the list that
-        ' holds the car identification number 
-        Const identificationSubItemIndex As Integer = 1
+            ' Get the car identification number 
+            currentCarIdentificationNumber = lvwcars.Items(lvwcars.FocusedItem.Index).SubItems(identificationSubItemIndex).Text
 
-        ' Get the car identification number 
-        currentCarIdentificationNumber = lvwcars.Items(lvwcars.FocusedItem.Index).SubItems(identificationSubItemIndex).Text
+            ' Use the car identification number to get the car from the collection object
+            Dim car As Car = CType(carList.Item(currentCarIdentificationNumber), Car)
 
-        ' Use the car identification number to get the car from the collection object
-        Dim car As Car = CType(carList.Item(currentCarIdentificationNumber), Car)
+            ' set the controls on the form
+            txtModel.Text = car.Model              ' get the model and set the text box
+            txtPrice.Text = car.Price.ToString               ' get the Price and set the text box
+            cmbMake.Text = car.Make                    ' get the Make and set the combo box
+            cmbYear.Text = car.Year.ToString                  ' get the year and set the combo box
+            chkNew.Checked = car.isNew ' get the new status and set the combo box
 
-        ' set the controls on the form
-        txtModel.Text = car.Model              ' get the model and set the text box
-        txtPrice.Text = car.Price.ToString               ' get the Price and set the text box
-        cmbMake.Text = car.Make                    ' get the Make and set the combo box
-        cmbYear.Text = car.Year.ToString                  ' get the year and set the combo box
-        chkNew.Checked = car.isNew ' get the new status and set the combo box
+            lbResult.Text = car.GetCarData()
+        Catch
+            lbResult.Text = "Unexpected Error happend!!"
+        End Try
 
-        lbResult.Text = car.GetCarData()
 
 
     End Sub
 
+    Private Sub lvwCars_SelectedIndexChanged_1(sender As Object, e As EventArgs) Handles lvwCars.SelectedIndexChanged
 
+    End Sub
 End Class
 

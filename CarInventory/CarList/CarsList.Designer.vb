@@ -180,6 +180,7 @@ Partial Class frmCarInventory
         'colPrice
         '
         Me.colPrice.Text = "Price"
+        Me.colPrice.Width = 85
         '
         'colYear
         '
