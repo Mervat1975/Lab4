@@ -169,9 +169,11 @@ Public Class frmCarInventory
         ' check if the first name has been entered
         If txtPrice.Text.Trim.Length = 0 Then
             outputMessage += "Please enter the car's price" & vbCrLf
+         returnValue = False
         Else
             If Not IsNumeric(txtPrice.Text.Trim) Then
                 outputMessage += "Please enter the car's price as number greater than zero." & vbCrLf
+             returnValue = False
             Else
                 If Not (CDbl(txtPrice.Text.Trim) > 0) Then
                     ' If not set the error message
