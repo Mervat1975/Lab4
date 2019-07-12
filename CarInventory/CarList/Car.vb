@@ -134,9 +134,9 @@ Public Class Car
     ''' GetSalutation is a function that a salutation based on the private properties within the class scope
     ''' </summary>
     ''' <returns>String</returns>
-    Public Function GetSalutation() As String
+    Public Function GetCarData() As String
 
-        Return "Hi the car Make is " & carMake & ", Model: " & carModel & " year: " & carYear & ", " & " price: " & carYear & IIf(carIsNew = True, "the car is new", "the car is not new").ToString()
+        Return "This car is made by " & carMake & ", its Model is " & carModel & ", year is " & carYear & ", " & "  price is" & carPrice & IIf(carIsNew = True, " and  the car is new", " and the car is not new").ToString()
 
     End Function
 
